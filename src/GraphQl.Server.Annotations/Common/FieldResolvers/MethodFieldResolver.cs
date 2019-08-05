@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Linq;
 using System.Reflection;
 using GraphQL.Resolvers;
-using GraphQl.Server.Annotations.Common.Helpers;
+using GraphQl.Server.Annotations.Common.FieldResolvers.Core;
 using GraphQL.Types;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -14,18 +13,22 @@ namespace GraphQl.Server.Annotations.Common.FieldResolvers
         private readonly MethodInfo _serviceMethod;
         private readonly IServiceProvider _serviceProvider;
 
+        private readonly ArgumentsBuilder _argumentsBuilder;
+
 
         public MethodFieldResolver(Type serviceType, MethodInfo serviceMethod, IServiceProvider serviceProvider)
         {
             _serviceType = serviceType;
             _serviceMethod = serviceMethod;
             _serviceProvider = serviceProvider;
+
+            _argumentsBuilder = new ArgumentsBuilder(serviceMethod);
         }
 
 
         public object Resolve(ResolveFieldContext context)
         {
-            var arguments = GraphQlUtils.BuildArguments(_serviceMethod, context).ToArray();
+            var arguments = _argumentsBuilder.Build(context);
 
             var target = _serviceType.IsInstanceOfType(context.Source)
                 ? context.Source

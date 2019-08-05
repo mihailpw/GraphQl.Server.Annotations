@@ -6,7 +6,7 @@ using GraphQL.Types;
 namespace GraphQl.Server.Annotations.Attributes
 {
     [AttributeUsage(AttributeTargets.Parameter)]
-    public class GraphQlParameterAttribute : GraphQlAttribute, IQueryArgumentInfoProvider
+    public class GraphQlParameterAttribute : GraphQlAttribute, INameProvider, IQueryArgumentInfoProvider
     {
         public string Name { get; }
         public string Description { get; set; }
