@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
+	<metadata>
+		<id>GraphQl.Server.Annotations</id>
+		<version>1.0.0-alpha01</version>
+		<title>GraphQl Server Annotations</title>
+		<authors>Mihail Podshivadlov</authors>
+		<owners>Mihail Podshivadlov</owners>
+		<license type="expression">MIT</license>
+		<projectUrl>https://github.com/mihailpw/GraphQl.Server.Annotations</projectUrl>
+		<iconUrl>https://raw.githubusercontent.com/mihailpw/GraphQl.Server.Annotations/master/favicon.ico</iconUrl>
+		<requireLicenseAcceptance>false</requireLicenseAcceptance>
+		<description>GraphQl server annotations</description>
+		<releaseNotes>Initial 1.0.0-alpha01</releaseNotes>
+		<copyright>Copyright © Mihail Podshivadlov, 2019</copyright>
+		<tags>AspDotNetCore GraphQL Server Annotations</tags>
+		<summary>GraphQL Server Annotations for ASP.NET Core web apps</summary>
+		<dependencies>
+			<dependency id="GraphQL" version="3.0.0-preview-1194" include="runtime" />
+			<dependency id="GraphQL.Server.Transports.AspNetCore" version="3.5.0-alpha0014" />
+			<dependency id="GraphQL.Server.Transports.WebSockets" version="3.5.0-alpha0014" />
+			<dependency id="Microsoft.AspNetCore.Http" version="2.2.2" />
+		</dependencies>
+	</metadata>
+	<files>
+		<file src="out/GraphQl.Server.Annotations.dll" target="lib/netstandard2.0" />
+	</files>
+</package>
