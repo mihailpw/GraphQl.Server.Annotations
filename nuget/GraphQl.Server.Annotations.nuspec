@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
 	<metadata>
 		<id>GraphQl.Server.Annotations</id>
-		<version>1.0.0-alpha01</version>
+		<version>1.0.0-alpha02</version>
 		<title>GraphQl Server Annotations</title>
 		<authors>Mihail Podshivadlov</authors>
 		<owners>Mihail Podshivadlov</owners>
@@ -11,7 +11,7 @@
 		<iconUrl>https://raw.githubusercontent.com/mihailpw/GraphQl.Server.Annotations/master/favicon.ico</iconUrl>
 		<requireLicenseAcceptance>false</requireLicenseAcceptance>
 		<description>GraphQl server annotations</description>
-		<releaseNotes>Initial 1.0.0-alpha01</releaseNotes>
+		<releaseNotes>Add Page</releaseNotes>
 		<copyright>Copyright © Mihail Podshivadlov, 2019</copyright>
 		<tags>AspDotNetCore GraphQL Server Annotations</tags>
 		<summary>GraphQL Server Annotations for ASP.NET Core web apps</summary>
