@@ -4,21 +4,21 @@ using System.Linq;
 
 namespace GraphQl.Server.Annotations
 {
-    public static class NonNull
+    public static class NonNullExtensions
     {
-        public static NonNull<T> For<T>(T value)
+        public static NonNull<T> AsNonNull<T>(this T value)
         {
             return value;
         }
 
-        public static IEnumerable<NonNull<T>> Each<T>(IEnumerable<T> values)
+        public static IEnumerable<NonNull<T>> AsNonNullEach<T>(this IEnumerable<T> values)
         {
-            return values.Select(For);
+            return values.Select(AsNonNull);
         }
 
-        public static NonNull<IEnumerable<NonNull<T>>> ForAndEach<T>(IEnumerable<T> values)
+        public static NonNull<IEnumerable<NonNull<T>>> AsNonNullAndEach<T>(this IEnumerable<T> values)
         {
-            return For(Each(values));
+            return AsNonNull(AsNonNullEach(values));
         }
     }
 

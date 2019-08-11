@@ -4,7 +4,7 @@ namespace GraphQl.Server.Annotations.Common.Schemas
 {
     internal sealed class QuerySubscriptionSchema<TQuery, TSubscription> : SchemaBase
     {
-        public QuerySubscriptionSchema(IGraphQlTypeRegistry typeRegistry)
+        public QuerySubscriptionSchema(IGraphTypeRegistry typeRegistry)
             : base(typeRegistry)
         {
             Query = ActivatorHelper.CreateGraphQlObject(typeof(TQuery));

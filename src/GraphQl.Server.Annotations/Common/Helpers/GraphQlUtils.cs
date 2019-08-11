@@ -70,40 +70,6 @@ namespace GraphQl.Server.Annotations.Common.Helpers
             return methodInfo.GetParameters().Where(p => p.IsGraphQlMember());
         }
 
-        public static Type GetGraphQlTypeFor(Type type)
-        {
-            if (TypeUtils.Task.IsInType(type))
-                return GetGraphQlTypeFor(TypeUtils.Task.UnwrapType(type));
-
-            if (TypeUtils.Nullable.IsInType(type))
-                return GetGraphQlTypeFor(TypeUtils.Nullable.UnwrapType(type));
-
-            if (TypeUtils.Id.IsInType(type))
-                return typeof(IdGraphType);
-
-            if (TypeUtils.NonNull.IsInType(type))
-            {
-                var elementType = TypeUtils.NonNull.UnwrapType(type);
-                var elementGraphQlType = GetGraphQlTypeFor(elementType);
-                return typeof(NonNullGraphType<>).MakeGenericType(elementGraphQlType);
-            }
-
-            if (TypeUtils.DirectPage.IsInType(type))
-            {
-                var elementType = TypeUtils.DirectPage.UnwrapType(type);
-                return typeof(DirectPageType<>).MakeGenericType(elementType);
-            }
-
-            if (TypeUtils.Enumerable.IsInType(type))
-            {
-                var elementType = TypeUtils.Enumerable.UnwrapType(type);
-                var elementGraphQlType = GetGraphQlTypeFor(elementType);
-                return typeof(ListGraphType<>).MakeGenericType(elementGraphQlType);
-            }
-
-            return GlobalContext.TypeRegistry.Resolve(type);
-        }
-
         public static bool IsEnabledForRegister(Type type)
         {
             var realType = TypeUtils.GetRealType(type);

@@ -5,10 +5,10 @@ namespace GraphQl.Server.Annotations.Common.Schemas
 {
     internal abstract class SchemaBase : Schema
     {
-        private readonly IGraphQlTypeRegistry _typeRegistry;
+        private readonly IGraphTypeRegistry _typeRegistry;
 
 
-        protected SchemaBase(IGraphQlTypeRegistry typeRegistry)
+        protected SchemaBase(IGraphTypeRegistry typeRegistry)
         {
             _typeRegistry = typeRegistry;
         }

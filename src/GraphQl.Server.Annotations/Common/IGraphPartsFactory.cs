@@ -5,7 +5,7 @@ using GraphQL.Types;
 
 namespace GraphQl.Server.Annotations.Common
 {
-    internal interface IGraphQlPartsFactory
+    internal interface IGraphPartsFactory
     {
         FieldType CreateFieldType(PropertyInfo propertyInfo, IFieldResolver fieldResolver = null);
         FieldType CreateFieldType(MethodInfo methodInfo, IFieldResolver fieldResolver = null);

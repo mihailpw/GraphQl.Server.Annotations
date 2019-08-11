@@ -120,12 +120,12 @@ namespace GraphQl.Server.Annotations.Common.Helpers
         {
             public static bool IsInType(Type type)
             {
-                return type.IsGenericTypeDefinition(typeof(DirectPage<>));
+                return type.IsGenericTypeDefinition(typeof(Page<>));
             }
 
             public static Type UnwrapType(Type type)
             {
-                return type.IsGenericTypeDefinition(typeof(DirectPage<>))
+                return type.IsGenericTypeDefinition(typeof(Page<>))
                     ? type.GenericTypeArguments[0]
                     : type;
             }

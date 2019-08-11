@@ -6,14 +6,14 @@ using GraphQL.Types;
 
 namespace GraphQl.Server.Annotations.Common
 {
-    internal class GraphQlTypeRegistry : IGraphQlTypeRegistry
+    internal class GraphTypeRegistry : IGraphTypeRegistry
     {
-        private readonly Dictionary<Type, Type> _typeToGraphQlTypeMap;
+        private readonly Dictionary<Type, Type> _typeToGraphTypeMap;
 
 
-        public GraphQlTypeRegistry()
+        public GraphTypeRegistry()
         {
-            _typeToGraphQlTypeMap = new Dictionary<Type, Type>
+            _typeToGraphTypeMap = new Dictionary<Type, Type>
             {
                 [typeof(bool)] = typeof(BooleanGraphType),
                 [typeof(byte)] = typeof(ByteGraphType),
@@ -38,37 +38,26 @@ namespace GraphQl.Server.Annotations.Common
 
         public bool IsRegistered(Type type)
         {
-            return _typeToGraphQlTypeMap.ContainsKey(type);
+            return _typeToGraphTypeMap.ContainsKey(type);
         }
 
         public Type Resolve(Type type)
         {
-            return TryResolve(type, out var graphQlType)
-                ? graphQlType
-                : throw new InvalidOperationException($"Type {type.Name} is not registered.");
+            if (TryResolve(type, out var graphQlType))
+                return graphQlType;
+            else
+                throw new InvalidOperationException($"Type {type.Name} is not registered.");
         }
 
-        public bool TryResolve(Type type, out Type graphQlType)
+        public bool TryResolve(Type type, out Type graphType)
         {
-            if (_typeToGraphQlTypeMap.TryGetValue(type, out graphQlType))
-            {
-                return true;
-            }
-
-            if (type.IsEnum)
-            {
-                graphQlType = typeof(AutoEnumerationGraphType<>).MakeGenericType(type);
-                _typeToGraphQlTypeMap.Add(type, graphQlType);
-                return true;
-            }
-
-            return false;
+            return _typeToGraphTypeMap.TryGetValue(type, out graphType);
         }
 
         public IEnumerable<Type> ResolveAdditional(Type type)
         {
             var graphQlType = Resolve(type);
-            foreach (var typeToGraphQlType in _typeToGraphQlTypeMap)
+            foreach (var typeToGraphQlType in _typeToGraphTypeMap)
             {
                 if (typeToGraphQlType.Value == graphQlType
                     && typeToGraphQlType.Key != type)
@@ -80,7 +69,7 @@ namespace GraphQl.Server.Annotations.Common
 
         public IEnumerable<Type> ResolveAll()
         {
-            return _typeToGraphQlTypeMap.Values;
+            return _typeToGraphTypeMap.Values;
         }
 
         public Type RegisterInputObject(Type type)
@@ -98,19 +87,19 @@ namespace GraphQl.Server.Annotations.Common
             return Register(type, typeof(AutoInterfaceGraphType<>).MakeGenericType(type));
         }
 
-        public void DirectRegister(Type type, Type graphQlType)
+        public void DirectRegister(Type type, Type graphType)
         {
-            if (!graphQlType.IsGraphType())
+            if (!graphType.IsGraphType())
             {
-                throw new ArgumentException($"Invalid GraphQL type provided (graphQlType={graphQlType.Name}.", nameof(graphQlType));
+                throw new ArgumentException($"Invalid GraphQL type provided (graphType={graphType.Name}.", nameof(graphType));
             }
-            Register(type, graphQlType);
+            Register(type, graphType);
         }
 
 
         private Type Register(Type key, Type value)
         {
-            if (_typeToGraphQlTypeMap.TryGetValue(key, out var existingValue))
+            if (_typeToGraphTypeMap.TryGetValue(key, out var existingValue))
             {
                 if (value == existingValue)
                     return existingValue;
@@ -118,7 +107,7 @@ namespace GraphQl.Server.Annotations.Common
                 throw new ArgumentException($"Type {key.Name} already registered.");
             }
 
-            _typeToGraphQlTypeMap.Add(key, value);
+            _typeToGraphTypeMap.Add(key, value);
 
             return value;
         }

@@ -6,12 +6,12 @@ namespace GraphQl.Server.Annotations.Registrar.Configurators
     internal class MappingConfigurator : IMappingConfigurator
     {
         private readonly Type _graphQlType;
-        private readonly IGraphQlTypeRegistry _typeRegistry;
+        private readonly IGraphTypeRegistry _typeRegistry;
 
 
         public MappingConfigurator(
             Type graphQlType,
-            IGraphQlTypeRegistry typeRegistry)
+            IGraphTypeRegistry typeRegistry)
         {
             _graphQlType = graphQlType;
             _typeRegistry = typeRegistry;

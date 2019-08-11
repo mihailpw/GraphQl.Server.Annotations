@@ -4,7 +4,7 @@ namespace GraphQl.Server.Annotations.Common.Schemas
 {
     internal sealed class QueryMutationSchema<TQuery, TMutation> : SchemaBase
     {
-        public QueryMutationSchema(IGraphQlTypeRegistry typeRegistry)
+        public QueryMutationSchema(IGraphTypeRegistry typeRegistry)
             : base(typeRegistry)
         {
             Query = ActivatorHelper.CreateGraphQlObject(typeof(TQuery));
