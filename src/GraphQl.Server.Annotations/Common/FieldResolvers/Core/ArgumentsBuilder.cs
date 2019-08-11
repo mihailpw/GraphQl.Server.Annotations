@@ -56,7 +56,7 @@ namespace GraphQl.Server.Annotations.Common.FieldResolvers.Core
                         if (metadata.ReturnType.IsGenericType)
                         {
                             var contextSourceType = metadata.ReturnType.GenericTypeArguments[0];
-                            if (contextSourceType.IsInstanceOfType(context.Source))
+                            if (context.Source == null || contextSourceType.IsInstanceOfType(context.Source))
                             {
                                 yield return Activator.CreateInstance(typeof(ResolveFieldContext<>).MakeGenericType(contextSourceType), context);
                             }
