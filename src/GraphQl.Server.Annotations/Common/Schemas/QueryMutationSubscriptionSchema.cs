@@ -4,7 +4,7 @@ namespace GraphQl.Server.Annotations.Common.Schemas
 {
     internal class QueryMutationSubscriptionSchema<TQuery, TMutation, TSubscription> : SchemaBase
     {
-        public QueryMutationSubscriptionSchema(IGraphQlTypeRegistry typeRegistry)
+        public QueryMutationSubscriptionSchema(IGraphTypeRegistry typeRegistry)
             : base(typeRegistry)
         {
             Query = ActivatorHelper.CreateGraphQlObject(typeof(TQuery));

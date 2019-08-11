@@ -3,6 +3,8 @@ using GraphQl.Server.Annotations.Common;
 using GraphQl.Server.Annotations.Common.Schemas;
 using GraphQl.Server.Annotations.Common.Types;
 using GraphQl.Server.Annotations.Registrar.Configurators;
+using GraphQl.Server.Annotations.TypeResolvers;
+using GraphQl.Server.Annotations.TypeResolvers.Core;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 
@@ -69,18 +71,23 @@ namespace GraphQl.Server.Annotations.Registrar
 
         private static IConfigurator Register(IServiceCollection services)
         {
-            var typeRegistry = new GraphQlTypeRegistry();
+            var typeRegistry = new GraphTypeRegistry();
+            var globalGraphTypeResolversStorage = new GlobalGraphTypeResolverStorage();
 
             services.AddHttpContextAccessor();
-            services.TryAddSingleton<IGraphQlPartsFactory, GraphQlPartsFactory>();
-            services.TryAddSingleton<IGraphQlTypeRegistry>(typeRegistry);
+            services.TryAddSingleton<IGraphPartsFactory, GraphPartsFactory>();
+            services.TryAddSingleton<IGraphTypeRegistry>(typeRegistry);
+            services.TryAddSingleton<IGlobalGraphTypeResolver>(globalGraphTypeResolversStorage);
 
             services.TryAddSingleton(typeof(AutoEnumerationGraphType<>));
             services.TryAddSingleton(typeof(AutoInputObjectGraphType<>));
             services.TryAddSingleton(typeof(AutoInterfaceGraphType<>));
             services.TryAddSingleton(typeof(AutoInputObjectGraphType<>));
 
-            return new Configurator(services, typeRegistry);
+            return new Configurator(
+                services,
+                typeRegistry,
+                new GlobalGraphTypeResolvingConfigurator(globalGraphTypeResolversStorage, typeRegistry));
         }
     }
 }

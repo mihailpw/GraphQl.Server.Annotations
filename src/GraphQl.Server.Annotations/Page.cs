@@ -2,9 +2,9 @@
 
 namespace GraphQl.Server.Annotations
 {
-    public static class DirectPageExtensions
+    public static class PageExtensions
     {
-        public static DirectPage<T> AsPage<T>(
+        public static Page<T> AsPage<T>(
             this IEnumerable<T> items,
             int pageIndex,
             int pageSize,
@@ -12,11 +12,24 @@ namespace GraphQl.Server.Annotations
             int totalPages,
             int indexFrom = 0)
         {
-            return new DirectPage<T>(items, pageIndex, pageSize, totalCount, totalPages, indexFrom);
+            return new Page<T>(new PageInfo(pageIndex, pageSize, totalCount, totalPages, indexFrom), items);
         }
     }
 
-    public class DirectPage<T>
+    public class Page<T>
+    {
+        public PageInfo PageInfo { get; }
+
+        public IEnumerable<T> Items { get; }
+
+        public Page(PageInfo pageInfo, IEnumerable<T> items)
+        {
+            PageInfo = pageInfo;
+            Items = items;
+        }
+    }
+
+    public class PageInfo
     {
         public int PageIndex { get; }
 
@@ -28,22 +41,18 @@ namespace GraphQl.Server.Annotations
 
         public int IndexFrom { get; }
 
-        public IEnumerable<T> Items { get; }
-
         public bool HasPreviousPage => PageIndex - IndexFrom > 0;
 
         public bool HasNextPage => PageIndex - IndexFrom + 1 < TotalPages;
 
 
-        public DirectPage(
-            IEnumerable<T> items,
+        public PageInfo(
             int pageIndex,
             int pageSize,
             int totalCount,
             int totalPages,
             int indexFrom)
         {
-            Items = items;
             PageIndex = pageIndex;
             PageSize = pageSize;
             TotalCount = totalCount;

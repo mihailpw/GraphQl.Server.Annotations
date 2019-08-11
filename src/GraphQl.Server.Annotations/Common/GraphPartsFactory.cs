@@ -4,18 +4,21 @@ using System.Reflection;
 using GraphQL.Resolvers;
 using GraphQl.Server.Annotations.Common.Helpers;
 using GraphQl.Server.Annotations.Providers;
+using GraphQl.Server.Annotations.TypeResolvers;
 using GraphQL.Types;
 
 namespace GraphQl.Server.Annotations.Common
 {
-    internal class GraphQlPartsFactory : IGraphQlPartsFactory
+    internal class GraphPartsFactory : IGraphPartsFactory
     {
-        private readonly IGraphQlTypeRegistry _typeRegistry;
+        private readonly IGraphTypeRegistry _typeRegistry;
+        private readonly IGlobalGraphTypeResolver _globalGraphTypeResolver;
 
 
-        public GraphQlPartsFactory(IGraphQlTypeRegistry typeRegistry)
+        public GraphPartsFactory(IGraphTypeRegistry typeRegistry, IGlobalGraphTypeResolver globalGraphTypeResolver)
         {
             _typeRegistry = typeRegistry;
+            _globalGraphTypeResolver = globalGraphTypeResolver;
         }
 
 
@@ -24,7 +27,7 @@ namespace GraphQl.Server.Annotations.Common
             return new FieldType
             {
                 Name = propertyInfo.Name,
-                Type = GraphQlUtils.GetGraphQlTypeFor(propertyInfo.PropertyType),
+                Type = _globalGraphTypeResolver.ResolveGraphType(propertyInfo.PropertyType),
                 Arguments = null,
                 Resolver = fieldResolver,
             };
@@ -37,7 +40,7 @@ namespace GraphQl.Server.Annotations.Common
             return new FieldType
             {
                 Name = methodInfo.Name,
-                Type = GraphQlUtils.GetGraphQlTypeFor(methodInfo.ReturnType),
+                Type = _globalGraphTypeResolver.ResolveGraphType(methodInfo.ReturnType),
                 Arguments = new QueryArguments(queryArguments),
                 Resolver = fieldResolver,
             };
@@ -45,7 +48,7 @@ namespace GraphQl.Server.Annotations.Common
 
         public Type CreateInterfaceType(Type interfaceType)
         {
-            return GraphQlUtils.GetGraphQlTypeFor(interfaceType);
+            return _globalGraphTypeResolver.ResolveGraphType(interfaceType);
         }
 
         public Func<object, bool> CreateIsTypeOfFunc(Type type)
@@ -75,9 +78,9 @@ namespace GraphQl.Server.Annotations.Common
         }
 
 
-        private static QueryArgument CreateQueryArgument(ParameterInfo parameterInfo)
+        private QueryArgument CreateQueryArgument(ParameterInfo parameterInfo)
         {
-            var queryArgument = new QueryArgument(GraphQlUtils.GetGraphQlTypeFor(parameterInfo.ParameterType))
+            var queryArgument = new QueryArgument(_globalGraphTypeResolver.ResolveGraphType(parameterInfo.ParameterType))
             {
                 Name = parameterInfo.Name,
                 DefaultValue = parameterInfo.HasDefaultValue ? parameterInfo.DefaultValue : null
