@@ -116,6 +116,21 @@ namespace GraphQl.Server.Annotations.Common.Helpers
             }
         }
 
+        public static class DirectPage
+        {
+            public static bool IsInType(Type type)
+            {
+                return type.IsGenericTypeDefinition(typeof(DirectPage<>));
+            }
+
+            public static Type UnwrapType(Type type)
+            {
+                return type.IsGenericTypeDefinition(typeof(DirectPage<>))
+                    ? type.GenericTypeArguments[0]
+                    : type;
+            }
+        }
+
         public static class ResolveFieldContext
         {
             public static bool IsInType(Type type)
@@ -161,6 +176,8 @@ namespace GraphQl.Server.Annotations.Common.Helpers
                     resultType = Id.UnwrapType(resultType);
                 else if (NonNull.IsInType(resultType))
                     resultType = NonNull.UnwrapType(resultType);
+                else if (DirectPage.IsInType(resultType))
+                    resultType = DirectPage.UnwrapType(resultType);
                 else
                     return resultType;
             }

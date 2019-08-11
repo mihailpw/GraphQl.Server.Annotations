@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using GraphQl.Server.Annotations.Common.Types;
 using GraphQL.Types;
 
 namespace GraphQl.Server.Annotations.Common.Helpers
@@ -85,6 +86,12 @@ namespace GraphQl.Server.Annotations.Common.Helpers
                 var elementType = TypeUtils.NonNull.UnwrapType(type);
                 var elementGraphQlType = GetGraphQlTypeFor(elementType);
                 return typeof(NonNullGraphType<>).MakeGenericType(elementGraphQlType);
+            }
+
+            if (TypeUtils.DirectPage.IsInType(type))
+            {
+                var elementType = TypeUtils.DirectPage.UnwrapType(type);
+                return typeof(DirectPageType<>).MakeGenericType(elementType);
             }
 
             if (TypeUtils.Enumerable.IsInType(type))
