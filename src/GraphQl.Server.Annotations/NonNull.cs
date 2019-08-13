@@ -22,8 +22,15 @@ namespace GraphQl.Server.Annotations
         }
     }
 
-    public struct NonNull<T> : IEquatable<NonNull<T>>
+    public interface INonNull
     {
+        object ValueObject { get; }
+    }
+
+    public struct NonNull<T> : INonNull, IEquatable<NonNull<T>>
+    {
+        object INonNull.ValueObject => Value;
+
         public T Value { get; }
 
 

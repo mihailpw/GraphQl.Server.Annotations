@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Reflection;
+using System.Threading.Tasks;
 using GraphQL.Resolvers;
 using GraphQl.Server.Annotations.Common.FieldResolvers.Core;
+using GraphQl.Server.Annotations.Common.Helpers;
 using GraphQL.Types;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -37,7 +39,23 @@ namespace GraphQl.Server.Annotations.Common.FieldResolvers
             if (target == null)
                 throw new InvalidOperationException($"Could not resolve an instance of {_serviceType.Name} to execute {(context.ParentType != null ? $"{context.ParentType.Name}." : null)}{context.FieldName}");
 
-            return _serviceMethod.Invoke(target, arguments);
+            var result = _serviceMethod.Invoke(target, arguments);
+
+            return ProcessingUtils.ProcessSyncOrAsync(result, SkipTypes);
+        }
+
+
+        private static object SkipTypes(object value)
+        {
+            switch (value)
+            {
+                case IId idValue:
+                    return idValue.ValueObject;
+                case INonNull nonNullValue:
+                    return nonNullValue.ValueObject;
+                default:
+                    return value;
+            }
         }
     }
 }

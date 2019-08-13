@@ -2,8 +2,15 @@
 
 namespace GraphQl.Server.Annotations
 {
-    public struct Id<T> : IEquatable<Id<T>>
+    public interface IId
     {
+        object ValueObject { get; }
+    }
+
+    public struct Id<T> : IId, IEquatable<Id<T>>
+    {
+        object IId.ValueObject => Value;
+
         public T Value { get; }
 
 

@@ -74,7 +74,7 @@ namespace GraphQl.Server.Annotations.Common.Helpers
         {
             var realType = TypeUtils.GetRealType(type);
             var isEnabledForRegister = GlobalContext.TypeRegistry.IsRegistered(realType);
-            return isEnabledForRegister;
+            return isEnabledForRegister || realType.IsEnum;
         }
     }
 }

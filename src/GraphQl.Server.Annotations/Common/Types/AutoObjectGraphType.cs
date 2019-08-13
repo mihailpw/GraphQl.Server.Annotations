@@ -8,7 +8,7 @@ using GraphQL.Types;
 
 namespace GraphQl.Server.Annotations.Common.Types
 {
-    internal sealed class AutoObjectGraphType<T> : ObjectGraphType<T>
+    internal sealed class AutoObjectGraphType<T> : ObjectGraphType
     {
         public AutoObjectGraphType()
         {
@@ -24,7 +24,6 @@ namespace GraphQl.Server.Annotations.Common.Types
 
             type.FindInAttributes<IGraphTypeInfoProvider>()?.Provide(this, type, serviceProvider);
 
-            var s = GraphQlUtils.GetRegisteredProperties(type).ToList();
             foreach (var propertyInfo in GraphQlUtils.GetRegisteredProperties(type))
             {
                 var fieldType = partsFactory.CreateFieldType(propertyInfo, new PropertyFieldResolver(propertyInfo, config));

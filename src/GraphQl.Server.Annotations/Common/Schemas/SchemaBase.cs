@@ -17,7 +17,7 @@ namespace GraphQl.Server.Annotations.Common.Schemas
         protected void PopulateAdditionalTypes()
         {
             var registerTypeMethodInfo = GetType().GetMethods().First(mi => mi.Name == nameof(RegisterType) && mi.IsGenericMethod);
-            foreach (var graphQlType in _typeRegistry.ResolveAll())
+            foreach (var graphQlType in _typeRegistry.ResolveAll().ToList())
             {
                 if (!AllTypes.Any(it => graphQlType.IsInstanceOfType(it)))
                 {

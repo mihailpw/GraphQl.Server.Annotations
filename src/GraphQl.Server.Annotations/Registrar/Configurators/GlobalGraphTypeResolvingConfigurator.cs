@@ -25,6 +25,7 @@ namespace GraphQl.Server.Annotations.Registrar.Configurators
             _globalGraphTypeResolverStorage.GraphTypeResolvers.Add(new NonNullGraphTypeResolver(globalGraphTypeResolverStorage));
             _globalGraphTypeResolverStorage.GraphTypeResolvers.Add(new ListGraphTypeResolver(globalGraphTypeResolverStorage));
             _globalGraphTypeResolverStorage.GraphTypeResolvers.Add(new PageGraphTypeResolver());
+            _globalGraphTypeResolverStorage.GraphTypeResolvers.Add(new PartialGraphTypeResolver());
             _globalGraphTypeResolverStorage.GraphTypeResolvers.Add(new AutoEnumGraphTypeResolver(graphTypeRegistry));
         }
 

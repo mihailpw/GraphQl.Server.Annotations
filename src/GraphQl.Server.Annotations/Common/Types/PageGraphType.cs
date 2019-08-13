@@ -21,7 +21,7 @@ namespace GraphQl.Server.Annotations.Common.Types
         }
     }
 
-    internal class PageGraphType<T> : ObjectGraphType<Page<T>>
+    internal class PageGraphType<T> : ObjectGraphType
     {
         private readonly IGraphTypeRegistry _typeRegistry = GlobalContext.TypeRegistry;
         private readonly IGlobalGraphTypeResolver _typeResolver = GlobalContext.TypeResolver;
@@ -33,10 +33,16 @@ namespace GraphQl.Server.Annotations.Common.Types
             var objectType = _typeRegistry.ResolveAdditional(type).FirstOrDefault(t => t.IsGraphQlMember()) ?? type;
             var graphQlType = _typeResolver.ResolveGraphType(type);
 
-            Name = $"{objectType.GetNameOrDefault(objectType.Name)}Page";
+            Name = $"{objectType.GetNameOrDefault(defaultName: objectType.Name)}Page";
 
-            Field(m => m.PageInfo, type: typeof(PageInfoGraphType)).Description("Page index");
-            Field(m => m.Items, type: typeof(ListGraphType<>).MakeGenericType(graphQlType)).Description("Items");
+            Field(
+                type: typeof(NonNullGraphType<PageInfoGraphType>),
+                name: nameof(Page<object>.PageInfo),
+                description: "Page info");
+            Field(
+                type: typeof(ListGraphType<>).MakeGenericType(graphQlType),
+                name: nameof(Page<object>.Items),
+                description: "Page items");
         }
     }
 }
